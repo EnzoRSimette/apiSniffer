@@ -3,7 +3,7 @@ import Database from "better-sqlite3";
 class BancoDeDados {
     #db;
     constructor() {
-        this.#db = Database("endpoints_cadastrados.db");
+        this.#db = new Database("endpoints_cadastrados.db");
         const query1 = this.#db.prepare(`--sql;
             CREATE TABLE IF NOT EXISTS apis (
                 url_do_endpoint TEXT PRIMARY KEY,
@@ -12,8 +12,8 @@ class BancoDeDados {
         `);
         const query2 = this.#db.prepare(`--sql;
             CREATE TABLE IF NOT EXISTS estatisticas (
-                "url" TEXT,
-                "status" INT,
+                url TEXT,
+                status INTEGER,
                 tempo_de_resposta INT,
                 timestamp_fetch TEXT
             )
@@ -29,16 +29,23 @@ class BancoDeDados {
         return query.all();
     }
 
-    inserirResponse(response) {}
-}
+    inserirResponse(response) {
+        const query = this.#db.prepare(`--sql;
+            INSERT INTO estatisticas (url, status, tempo_de_resposta, timestamp_fetch) VALUES (
+                @url, @status, @tempo_de_resposta, @timestamp_fetch
+            )
+        `);
+        query.run(response);
+    }
 
-bancoDeDados.prototype.inserirApis = function (objetoDeEndereços) {
-    const query = this.#db.prepare(`--sql;
+    inserirApis(objetoDeEndereços) {
+        const query = this.#db.repare(`--sql;
         INSERT OR REPLACE INTO apis (url_do_endpoint, get_ou_post) VALUES (?, ?);
     `);
-    for (const [key, value] of Object.entries(objetoDeEndereços)) {
-        query.run(key, value);
+        for (const [key, value] of Object.entries(objetoDeEndereços)) {
+            query.run(key, value);
+        }
     }
-};
+}
 
 export const db = new BancoDeDados();
