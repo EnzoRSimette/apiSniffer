@@ -2,6 +2,7 @@ import Database from "better-sqlite3";
 
 class BancoDeDados {
     #db;
+
     constructor() {
         this.#db = new Database("endpoints_cadastrados.db");
         const query1 = this.#db.prepare(`--sql;
@@ -10,6 +11,7 @@ class BancoDeDados {
                 get_ou_post TEXT
             )
         `);
+
         const query2 = this.#db.prepare(`--sql;
             CREATE TABLE IF NOT EXISTS estatisticas (
                 url TEXT,
@@ -18,6 +20,7 @@ class BancoDeDados {
                 timestamp_fetch TEXT
             )
         `);
+
         query1.run();
         query2.run();
     }
