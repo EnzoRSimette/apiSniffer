@@ -6,7 +6,6 @@ class App {
     constructor(port) {
         this.#app = express();
         this.#app.use(verificarApis.router);
-        this.#app.use(verificarApis.router);
         this.#app.listen(port);
     }
 }

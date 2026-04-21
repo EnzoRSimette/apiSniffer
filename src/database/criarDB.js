@@ -2,7 +2,6 @@ import Database from "better-sqlite3";
 
 class BancoDeDados {
     #db;
-
     constructor() {
         this.#db = new Database("endpoints_cadastrados.db");
         const query1 = this.#db.prepare(`--sql;
